@@ -1,15 +1,9 @@
 services:
-  urlshortener:
-    image: ${DOCKER_REGISTRY-}urlshortener
-    container_name: UrlShortener.Api
+  urlshortener.api:
+    image: ${DOCKER_REGISTRY-}urlshortenerapi
     build:
       context: .
-      dockerfile: src/UrlShortener/Dockerfile
-    ports:
-      - "5179:8080"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=5179
+      dockerfile: src/UrlShortener.Api/Dockerfile
 
   urlshortener-db:
     image: "mcr.microsoft.com/mssql/server:2022-latest"

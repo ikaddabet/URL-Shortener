@@ -20,16 +20,16 @@ RUN apt-get update \
     clang zlib1g-dev
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["UrlShortener/UrlShortener.csproj", "UrlShortener/"]
-RUN dotnet restore "./UrlShortener/UrlShortener.csproj"
+COPY ["src/UrlShortener.Api/UrlShortener.Api.csproj", "src/UrlShortener.Api/"]
+RUN dotnet restore "./src/UrlShortener.Api/UrlShortener.Api.csproj"
 COPY . .
-WORKDIR "/src/UrlShortener"
-RUN dotnet build "./UrlShortener.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/src/UrlShortener.Api"
+RUN dotnet build "./UrlShortener.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./UrlShortener.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
+RUN dotnet publish "./UrlShortener.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
 
 # This stage is used as the base for the final stage when launching from VS to support debugging in regular mode (Default when not using the Debug configuration)
 FROM base AS aotdebug
@@ -45,4 +45,4 @@ FROM ${FINAL_BASE_IMAGE:-mcr.microsoft.com/dotnet/runtime-deps:9.0} AS final
 WORKDIR /app
 EXPOSE 8080
 COPY --from=publish /app/publish .
-ENTRYPOINT ["./UrlShortener"]
+ENTRYPOINT ["./UrlShortener.Api"]

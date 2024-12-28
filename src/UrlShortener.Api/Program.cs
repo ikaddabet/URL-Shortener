@@ -1,6 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json.Serialization;
-
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
