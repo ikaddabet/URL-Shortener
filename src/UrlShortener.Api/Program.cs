@@ -1,3 +1,5 @@
+using UrlShortener.Models;
+
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -13,6 +15,18 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/openapi/v1.json", "v1");
     });
 }
+
+app.MapPost("api/shorten", (ShortenUrlRequest request) =>
+{
+    if (!Uri.TryCreate(request.Url, UriKind.Absolute, out var uri))
+    {
+        return Results.BadRequest("The specified URL is invalid.");
+    }
+
+
+
+    return Results.Ok();
+});
 
 app.UseHttpsRedirection();
 
