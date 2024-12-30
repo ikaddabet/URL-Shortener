@@ -4,12 +4,3 @@ services:
     build:
       context: .
       dockerfile: src/UrlShortener.Api/Dockerfile
-
-  urlshortener-db:
-    image: "mcr.microsoft.com/mssql/server:2022-latest"
-    container_name: UrlShortener.Db
-    ports:
-      - "1433:1433"
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Password123

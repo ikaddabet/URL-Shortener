@@ -1,12 +1,12 @@
 ﻿using UrlShortener.Models;
 
-namespace UrlShortener.Services;
+namespace UrlShortener.Helper;
 
-public class UrlShorteningService
+public static class UrlShorteningHelper
 {
-    private readonly Random _random = new();
+    private static readonly Random _random = new();
 
-    public string GenerateShortLink()
+    public static string GenerateShortLink()
     {
         return new string(Enumerable.Repeat(ShortLinkSettings.Alphabet, ShortLinkSettings.Length).Select(s => s[_random.Next(s.Length)]).ToArray());
     }
