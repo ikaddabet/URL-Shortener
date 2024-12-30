@@ -28,12 +28,7 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
-app.MapPost("api/shorten", async (
-    ShortenUrlRequest request,
-    UrlShorteningService urlShorteningService,
-    ApplicationDbContext dbContext,
-    HttpContext httpContext
-    ) =>
+app.MapPost("api/shorten", async (ShortenUrlRequest request, UrlShorteningService urlShorteningService, ApplicationDbContext dbContext, HttpContext httpContext) =>
 {
     if (!Uri.TryCreate(request.Url, UriKind.Absolute, out var uri))
     {
@@ -55,7 +50,19 @@ app.MapPost("api/shorten", async (
 
     await dbContext.SaveChangesAsync();
 
-    return Results.Created(shortenedUrl.ShortUrl, Code);
+    return Results.Ok(shortenedUrl.ShortUrl);
+});
+
+app.MapGet("api/{code}", async (string code, UrlShorteningService urlShorteningService, ApplicationDbContext dbContext) =>
+{
+    var shortenedUrl = await dbContext.ShortenedUrls.FirstOrDefaultAsync(x => x.Code == code);
+
+    if (shortenedUrl is null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Redirect(shortenedUrl.LongUrl);
 });
 
 app.UseHttpsRedirection();
