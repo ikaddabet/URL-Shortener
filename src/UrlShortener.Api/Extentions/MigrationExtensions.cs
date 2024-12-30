@@ -5,12 +5,15 @@ namespace UrlShortener.Api.Extentions;
 
 public static class MigrationExtensions
 {
-    public static void ApplyMigrations(this WebApplication app)
+    public static void ApplyMigrations([NotNull] this WebApplication app)
     {
-        using var scope = app.Services.CreateScope();
+        if (app.Environment.IsDevelopment() && false)
+        {
+            using var scope = app.Services.CreateScope();
 
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        dbContext.Database.Migrate();
+            dbContext.Database.Migrate();
+        }
     }
 }
