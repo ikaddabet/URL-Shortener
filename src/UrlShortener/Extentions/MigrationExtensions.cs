@@ -1,9 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Diagnostics.CodeAnalysis;
+using UrlShortener.Data;
 
-namespace UrlShortener.Api.Extentions;
+namespace UrlShortener.Extentions;
 
-public static class MigrationExtensions
+internal static class MigrationExtensions
 {
     public static void ApplyMigrations([NotNull] this WebApplication app)
     {

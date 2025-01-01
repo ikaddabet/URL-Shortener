@@ -1,16 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UrlShortener.Entity;
+using UrlShortener.Entities;
 using UrlShortener.Models;
 
-namespace UrlShortener.Api;
+namespace UrlShortener.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-    }
-
-    public DbSet<ShortenedUrl> ShortenedUrls { get; set; }
+    public DbSet<ShortenedUrl> ShortenedUrls => Set<ShortenedUrl>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -20,5 +16,5 @@ public class ApplicationDbContext : DbContext
 
             builder.HasIndex(x => x.Code).IsUnique();
         });
-    } 
+    }
 }

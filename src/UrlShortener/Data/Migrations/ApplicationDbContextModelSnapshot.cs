@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UrlShortener.Api;
+using UrlShortener.Data;
 
 #nullable disable
 
-namespace UrlShortener.Api.Migrations
+namespace UrlShortener.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241230203900_intial")]
-    partial class Intial
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

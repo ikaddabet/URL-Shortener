@@ -1,4 +1,4 @@
-﻿namespace UrlShortener.Entity;
+﻿namespace UrlShortener.Entities;
 
 public class ShortenedUrl
 {

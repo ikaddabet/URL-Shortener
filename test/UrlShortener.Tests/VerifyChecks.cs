@@ -1,5 +1,5 @@
-﻿using UrlShortener.Helper;
-using FluentAssertions;
+﻿using FluentAssertions;
+using UrlShortener.Helper;
 using UrlShortener.Models;
 
 namespace UrlShortener.Tests;

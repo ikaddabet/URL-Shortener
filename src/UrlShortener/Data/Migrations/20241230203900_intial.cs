@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace UrlShortener.Api.Migrations
+namespace UrlShortener.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Intial : Migration
