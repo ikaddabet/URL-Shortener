@@ -72,7 +72,7 @@ internal class UrlShorteningService(ApplicationDbContext context, IHttpContextAc
     {
         while (true)
         {
-            var Code = UrlShorteningHelper.GenerateShortLink();
+            var Code = UrlShorteningHelper.GenerateRandomCode();
             if (!await _context.ShortenedUrls.AnyAsync(x => x.Code == Code))
             {
                 return Code;
