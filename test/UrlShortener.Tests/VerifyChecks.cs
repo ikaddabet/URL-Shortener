@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using UrlShortener.Helper;
-using UrlShortener.Models;
+using UrlShortener.Core;
+using UrlShortener.Core.Helper;
 
 namespace UrlShortener.Tests;
 
@@ -15,7 +15,7 @@ internal static class VerifyChecks
         randomCode.Should().NotBeNullOrEmpty("The random code should not be null or empty.");
 
         // Check if the code follows an expected pattern or length.
-        randomCode.Length.Should().Be(ShortLinkSettings.Length, $"The random code should have a length of {ShortLinkSettings.Length} characters.");
+        randomCode.Length.Should().Be(UrlShortenerSettings.Length, $"The random code should have a length of {UrlShortenerSettings.Length} characters.");
 
         await Task.CompletedTask;
     }

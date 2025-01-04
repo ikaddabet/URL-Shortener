@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using UrlShortener.Core.Helper;
 using UrlShortener.Data;
 using UrlShortener.Entities;
-using UrlShortener.Helper;
 
-namespace UrlShortener.Services;
+namespace UrlShortener.Services.UrlShortening;
 
 internal class UrlShorteningService(ApplicationDbContext context, IHttpContextAccessor httpContext, ILogger<UrlShorteningService> logger) : IUrlShorteningService
 {

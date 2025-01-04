@@ -1,6 +1,6 @@
-﻿namespace UrlShortener.Models;
+﻿namespace UrlShortener.Core;
 
-public static class ShortLinkSettings
+public static class UrlShortenerSettings
 {
     public const int Length = 7;
     public const string Alphabet =

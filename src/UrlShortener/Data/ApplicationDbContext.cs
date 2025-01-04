@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UrlShortener.Entities;
-using UrlShortener.Models;
+using UrlShortener.Core;
+using UrlShortener.Core.Entities;
 
 namespace UrlShortener.Data;
 
@@ -12,7 +12,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         modelBuilder.Entity<ShortenedUrl>(builder =>
         {
-            builder.Property(x => x.Code).HasMaxLength(ShortLinkSettings.Length);
+            builder.Property(x => x.Code).HasMaxLength(UrlShortenerSettings.Length);
 
             builder.HasIndex(x => x.Code).IsUnique();
         });

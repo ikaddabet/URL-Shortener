@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
-using UrlShortener.Models;
-using UrlShortener.Services;
+using UrlShortener.Core.Models;
+using UrlShortener.Services.UrlShortening;
 
 
 namespace UrlShortener;
