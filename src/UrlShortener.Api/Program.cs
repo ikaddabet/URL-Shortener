@@ -1,17 +1,16 @@
-using Microsoft.EntityFrameworkCore;
 using UrlShortener;
-using UrlShortener.Data;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddUrlShortener();
+builder.Services.AddUrlShortener(options =>
+{
+    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    options.DatabaseName = builder.Configuration.GetConnectionString("DatabaseName") ?? throw new InvalidOperationException("Connection string 'DatabaseName' not found.");
+}).AddMSSQL();
 
 var app = builder.Build();
 
