@@ -1,13 +1,38 @@
 ﻿using Microsoft.Extensions.Logging;
 using MySqlConnector;
+using System.Text.RegularExpressions;
 using UrlShortener.Core;
-using UrlShortener.Core.Helpers.SQLHelper;
+using UrlShortener.Core.Helpers.SQLHelpers;
 
-namespace UrlShortener.Database.MySQL.Helpers.SQLHelper;
+namespace UrlShortener.Database.MySQL.Helpers.SQLHelpers;
 
-public class MySQLHelper(ILogger<MySQLHelper> logger, UrlShortenerOptions options) : ISQLHelper
+public partial class MySQLHelper(ILogger<MySQLHelper> logger, UrlShortenerOptions options) : ISQLHelper
 {
-    public async Task<bool> CheckConnectionAsync(CancellationToken cancellationToken = default)
+    [GeneratedRegex(@"^[a-zA-Z0-9_-]{1,64}$")]
+    private static partial Regex DatabaseNameRegex();
+
+    public bool CheckDatabaseName(string Name, bool ThrowException = true)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(Name))
+                throw new ArgumentException("Database name cannot be null or empty.");
+
+            if (!DatabaseNameRegex().IsMatch(Name))
+                throw new ArgumentException("Invalid MySQL database name. It must be between 1 and 64 characters and can only contain letters, numbers, underscores, and hyphens.");
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            logger?.LogError(ex, "Database name is invalid.");
+            if (ThrowException)
+                throw;
+            return false;
+        }
+    }
+
+    public async Task<bool> CheckConnectionAsync(CancellationToken cancellationToken = default, bool ThrowException = true)
     {
         try
         {
@@ -19,11 +44,13 @@ public class MySQLHelper(ILogger<MySQLHelper> logger, UrlShortenerOptions option
         catch (Exception ex)
         {
             logger.LogError(ex, "Error checking connection.");
+            if (ThrowException)
+                throw;
             return false;
         }
     }
 
-    public async Task<bool> CheckTableExistsAsync(string tableName, CancellationToken cancellationToken = default)
+    public async Task<bool> CheckTableExistsAsync(string tableName, CancellationToken cancellationToken = default, bool ThrowException = true)
     {
         try
         {
@@ -37,11 +64,13 @@ public class MySQLHelper(ILogger<MySQLHelper> logger, UrlShortenerOptions option
         catch (Exception ex)
         {
             logger.LogError(ex, "Error checking table exists.");
+            if (ThrowException)
+                throw;
             return false;
         }
     }
 
-    public async Task<bool> CreateTableAsync(string tableName, CancellationToken cancellationToken = default)
+    public async Task<bool> CreateTableAsync(string tableName, CancellationToken cancellationToken = default, bool ThrowException = true)
     {
         try
         {
@@ -61,11 +90,13 @@ public class MySQLHelper(ILogger<MySQLHelper> logger, UrlShortenerOptions option
         catch (Exception ex)
         {
             logger.LogError(ex, "Failed to create table in MySQL.");
+            if (ThrowException)
+                throw;
             return false;
         }
     }
 
-    public async Task<string> GetDatabaseVersionAsync(CancellationToken cancellationToken = default)
+    public async Task<string> GetDatabaseVersionAsync(CancellationToken cancellationToken = default, bool ThrowException = true)
     {
         try
         {
@@ -79,7 +110,9 @@ public class MySQLHelper(ILogger<MySQLHelper> logger, UrlShortenerOptions option
         catch (Exception ex)
         {
             logger.LogError(ex, "Error getting database version.");
-            throw;
+            if (ThrowException)
+                throw;
+            return string.Empty;
         }
     }
 }

@@ -4,12 +4,12 @@ using UrlShortener.Core.Repository;
 namespace UrlShortener.Database.MySQL.Repository;
 public class MySQLShortenedUrlRepository : IShortenedUrlRepository
 {
-    public Task AddAsync(ShortenedUrl record)
+    public Task<string?> GetAsync(string Code)
     {
         throw new NotImplementedException();
     }
 
-    public Task<string?> GetAsync(string Code)
+    public Task AddAsync(ShortenedUrl record)
     {
         throw new NotImplementedException();
     }

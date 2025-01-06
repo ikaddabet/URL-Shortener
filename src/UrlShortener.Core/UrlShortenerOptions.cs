@@ -15,7 +15,7 @@ public class UrlShortenerOptions
     /// <summary>
     /// Default connection string used to connect to the database.
     /// </summary>
-    protected const string DefaultTablePrefix = "UrlShortener_";
+    protected const string DefaultTablePrefix = "_urlShortener_";
 
     /// <summary>
     /// The length of the shortened URL path.
