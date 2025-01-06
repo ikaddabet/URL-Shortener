@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UrlShortener.Core.Entities;
+﻿using UrlShortener.Core.Entities;
 
 namespace UrlShortener.Core.Migrations;
-public sealed class ShortenedUrlMigrationTracker
+public static class ShortenedUrlMigrationTracker
 {
     public static List<ShortenedUrlMigrationWithQuery> Migrations = [];
 
-    public static void AddMigration(string MigrationName, string TableName, string TableNameWithPrefix, string CreateTableQuery)
+    public static void AddMigration(string MigrationName, string? TableNameWithPrefix = null, string? QueryCheckBeforeExectution = null, string? Query = null)
     {
         // Trim leading and trailing spaces from the MigrationName
         string trimmedMigrationName = MigrationName.Trim();
@@ -25,10 +20,9 @@ public sealed class ShortenedUrlMigrationTracker
         Migrations.Add(new ShortenedUrlMigrationWithQuery
         {
             MigrationName = uniqueMigrationName,
-            TableName = TableName,
-            TableNameWithPrefix = TableName,
-            CreateTableQuery = CreateTableQuery,
-            AppliedAt = DateTime.UtcNow
+            TableNameWithPrefix = TableNameWithPrefix,
+            QueryCheckBeforeExectution = QueryCheckBeforeExectution,
+            Query = Query,
         });
 
         Console.WriteLine($"Migration '{uniqueMigrationName}' added.");

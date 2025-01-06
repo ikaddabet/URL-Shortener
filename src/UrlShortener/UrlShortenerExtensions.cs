@@ -4,17 +4,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 using UrlShortener.Core;
-using UrlShortener.Core.DatabaseInitializer;
 using UrlShortener.Core.Helpers.SQLHelpers;
 using UrlShortener.Core.Helpers.UrlShorteningHelper;
 using UrlShortener.Core.Models;
 using UrlShortener.Core.Repository;
-using UrlShortener.Database.MongoDB.Helpers.SQLHelpers;
-using UrlShortener.Database.MongoDB.Repository;
 using UrlShortener.Database.MSSQL.Helpers.SQLHelpers;
 using UrlShortener.Database.MSSQL.Repository;
-using UrlShortener.Database.MySQL.Helpers.SQLHelpers;
-using UrlShortener.Database.MySQL.Repository;
+using UrlShortener.DatabaseInitializer;
 using UrlShortener.Services.DatabaseBackground;
 using UrlShortener.Services.UrlShortener;
 
@@ -74,25 +70,25 @@ public static class UrlShortenerExtensions
 
 public class UrlShortenerBuilder(IServiceCollection services)
 {
-    public void AddMongoDB()
-    {
-        services.AddSingleton<ISQLHelper, MongoDBSQLHelper>();
-        services.AddScoped<IUrlShortenerDatabaseInitializer, MongoDBSQLUrlShortenerDatabaseInitializer>();
-        services.AddScoped<IShortenedUrlRepository, MongoDBSQLShortenedUrlRepository>();
-        services.AddHostedService<DatabaseBackgroundService>();
-    }
+    //public void AddMongoDB()
+    //{
+    //    services.AddSingleton<ISQLHelper, MongoDBSQLHelper>();
+    //    services.AddScoped<IUrlShortenerDatabaseInitializer, UrlShortenerDatabaseInitializer>();
+    //    services.AddScoped<IShortenedUrlRepository, MongoDBSQLShortenedUrlRepository>();
+    //    services.AddHostedService<DatabaseBackgroundService>();
+    //}
     public void AddMSSQL()
     {
         services.AddSingleton<ISQLHelper, MSSQLHelper>();
-        services.AddScoped<IUrlShortenerDatabaseInitializer, MSSQLUrlShortenerDatabaseInitializer>();
         services.AddScoped<IShortenedUrlRepository, MSSQLShortenedUrlRepository>();
+        services.AddSingleton<IUrlShortenerDatabaseInitializer, UrlShortenerDatabaseInitializer>();
         services.AddHostedService<DatabaseBackgroundService>();
     }
-    public void AddMySQL()
-    {
-        services.AddSingleton<ISQLHelper, MySQLHelper>();
-        services.AddScoped<IUrlShortenerDatabaseInitializer, MySQLUrlShortenerDatabaseInitializer>();
-        services.AddScoped<IShortenedUrlRepository, MySQLShortenedUrlRepository>();
-        services.AddHostedService<DatabaseBackgroundService>();
-    }
+    //public void AddMySQL()
+    //{
+    //    services.AddSingleton<ISQLHelper, MySQLHelper>();
+    //    services.AddScoped<IUrlShortenerDatabaseInitializer, UrlShortenerDatabaseInitializer>();
+    //    services.AddScoped<IShortenedUrlRepository, MySQLShortenedUrlRepository>();
+    //    services.AddHostedService<DatabaseBackgroundService>();
+    //}
 }

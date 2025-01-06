@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using UrlShortener.Core;
 using UrlShortener.Core.Entities;
 using UrlShortener.Core.Helpers.UrlShorteningHelper;
 using UrlShortener.Core.Repository;
 
 namespace UrlShortener.Services.UrlShortener;
 
-internal class UrlShortenerService(IShortenedUrlRepository shortenedUrlRepository, IHttpContextAccessor httpContext, ILogger<UrlShortenerService> logger) : IUrlShortenerService
+internal class UrlShortenerService(IShortenedUrlRepository shortenedUrlRepository, IHttpContextAccessor httpContext, ILogger<UrlShortenerService> logger, UrlShorteningHelper urlShorteningHelper) : IUrlShortenerService
 {
     private readonly HttpContext _httpContext = httpContext.HttpContext ?? throw new ArgumentNullException("""
         IHttpContextAccessor is null. 
@@ -67,7 +68,7 @@ internal class UrlShortenerService(IShortenedUrlRepository shortenedUrlRepositor
         {
             try
             {
-                var Code = UrlShorteningHelper.GenerateRandomCode();
+                var Code = urlShorteningHelper.GenerateRandomCode();
                 if (await shortenedUrlRepository.IsExistsAsync(Code))
                 {
                     throw new InvalidOperationException("Short code already exists.");

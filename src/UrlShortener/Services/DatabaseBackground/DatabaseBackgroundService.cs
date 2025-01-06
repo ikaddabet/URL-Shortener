@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using UrlShortener.Core.DatabaseInitializer;
+using UrlShortener.DatabaseInitializer;
 
 namespace UrlShortener.Services.DatabaseBackground;
 public class DatabaseBackgroundService(ILogger<DatabaseBackgroundService> logger, IUrlShortenerDatabaseInitializer databaseInitializer) : BackgroundService
@@ -13,14 +13,11 @@ public class DatabaseBackgroundService(ILogger<DatabaseBackgroundService> logger
 
             await databaseInitializer.InitializeDatabaseAsync(stoppingToken);
 
-            await databaseInitializer.InitializeSchemaAsync(stoppingToken);
-
             logger.LogInformation("Database initialization completed.");
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error initializing database.");
-            throw;
         }
     }
 }

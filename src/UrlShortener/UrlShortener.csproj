@@ -12,9 +12,7 @@
 	
   <ItemGroup>
     <ProjectReference Include="..\UrlShortener.Core\UrlShortener.Core.csproj" />
-    <ProjectReference Include="..\UrlShortener.Database.MongoDB\UrlShortener.Database.MongoDB.csproj" />
     <ProjectReference Include="..\UrlShortener.Database.MSSQL\UrlShortener.Database.MSSQL.csproj" />
-    <ProjectReference Include="..\UrlShortener.Database.MySQL\UrlShortener.Database.MySQL.csproj" />
   </ItemGroup>
 	
 </Project>
