@@ -1,13 +1,14 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 using UrlShortener.Core;
 using UrlShortener.Core.Entities;
 using UrlShortener.Core.Repository;
 using UrlShortener.Core.Utilities;
 
 namespace UrlShortener.Database.MSSQL.Repository;
-public class MSSQLShortenedUrlRepository(UrlShortenerOptions options) : IShortenedUrlRepository
+public class MSSQLShortenedUrlRepository(IOptions<UrlShortenerOptions> options) : IShortenedUrlRepository
 {
-    private readonly string _connectionString = options.ConnectionString;
+    private readonly string _connectionString = options.Value.ConnectionString;
 
     // Get the shortened URL record by Code
     public async Task<string?> GetAsync(string Code)
@@ -20,7 +21,7 @@ public class MSSQLShortenedUrlRepository(UrlShortenerOptions options) : IShorten
 
         var query = $@"
             SELECT LongUrl
-            FROM {TableNames.ShortenedUrlPrefixed(options.TablePrefix)}
+            FROM {TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)}
             WHERE Code = @Code";
 
         using var command = new SqlCommand(query, connection);
@@ -40,7 +41,7 @@ public class MSSQLShortenedUrlRepository(UrlShortenerOptions options) : IShorten
         await connection.OpenAsync();
 
         var query = $@"
-            INSERT INTO {TableNames.ShortenedUrlPrefixed(options.TablePrefix)} (LongUrl, ShortUrl, Code, CreatedOnUtc)
+            INSERT INTO {TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)} (LongUrl, ShortUrl, Code, CreatedOnUtc)
             VALUES (@LongUrl, @ShortUrl, @Code, @CreatedOnUtc)";
 
         using var command = new SqlCommand(query, connection);
@@ -63,7 +64,7 @@ public class MSSQLShortenedUrlRepository(UrlShortenerOptions options) : IShorten
 
         var query = $@"
             SELECT COUNT(1)
-            FROM {TableNames.ShortenedUrlPrefixed(options.TablePrefix)}
+            FROM {TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)}
             WHERE Code = @Code";
 
         using var command = new SqlCommand(query, connection);

@@ -1,6 +1,8 @@
-﻿namespace UrlShortener.Core.Helpers.UrlShorteningHelper;
+﻿using Microsoft.Extensions.Options;
 
-public class UrlShorteningHelper(UrlShortenerOptions UrlShortenerOptions)
+namespace UrlShortener.Core.Helpers.UrlShorteningHelper;
+
+public class UrlShorteningHelper(IOptions<UrlShortenerOptions> UrlShortenerOptions)
 {
     private static readonly Random _random = new();
 
@@ -10,6 +12,6 @@ public class UrlShorteningHelper(UrlShortenerOptions UrlShortenerOptions)
     /// <returns>Random code Passed on <see cref="UrlShortenerOptions"/> </returns>
     public string GenerateRandomCode()
     {
-        return new string(Enumerable.Repeat(UrlShortenerOptions.Alphabet, UrlShortenerOptions.Length).Select(s => s[_random.Next(s.Length)]).ToArray());
+        return new string(Enumerable.Repeat(UrlShortenerOptions.Value.Alphabet, UrlShortenerOptions.Value.Length).Select(s => s[_random.Next(s.Length)]).ToArray());
     }
 }

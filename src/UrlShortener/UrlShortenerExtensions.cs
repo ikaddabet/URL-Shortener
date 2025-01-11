@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using UrlShortener.Core;
 using UrlShortener.Core.Helpers.SQLHelpers;
 using UrlShortener.Core.Helpers.UrlShorteningHelper;
@@ -28,7 +30,7 @@ public static class UrlShortenerExtensions
             services.AddHttpContextAccessor();
         }
 
-        services.AddSingleton(options);
+        services.ConfigureOptions(options);
         services.AddSingleton<UrlShorteningHelper>();
         services.AddScoped<IUrlShortenerService, UrlShortenerService>();
 
