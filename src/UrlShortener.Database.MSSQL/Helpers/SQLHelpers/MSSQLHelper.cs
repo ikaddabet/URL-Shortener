@@ -101,6 +101,7 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
             {
                 var exists = await CheckMigartionExistsAsync(Migration, cancellationToken);
                 if (exists) continue;
+                logger?.LogInformation($"Applying migration '{Migration.MigrationName}'...");
 
                 using var connection = new SqlConnection(options.Value.ConnectionString);
                 await connection.OpenAsync(cancellationToken);
@@ -124,6 +125,7 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
                     await logCommand.ExecuteNonQueryAsync(cancellationToken);
 
                     await transaction.CommitAsync(cancellationToken);
+                    logger?.LogInformation($"Migration '{Migration.MigrationName}' applied successfully.");
                 }
                 catch (Exception)
                 {
@@ -155,7 +157,7 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
             var boolResult = result != null && (bool)result;
             if (!boolResult)
             {
-                logger?.LogInformation($"Migration '{Migration.MigrationName}' does not exist.");
+                logger?.LogWarning($"Migration '{Migration.MigrationName}' does not exist.");
             }
             return boolResult;
         }

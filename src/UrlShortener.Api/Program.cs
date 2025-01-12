@@ -10,7 +10,7 @@ builder.Services.AddUrlShortener(options =>
 {
     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
     options.DatabaseName = builder.Configuration.GetConnectionString("DatabaseName") ?? throw new InvalidOperationException("Connection string 'DatabaseName' not found.");
-}).AddMSSQL();
+}).AddConfiguration(builder.Configuration).AddMSSQL();
 
 var app = builder.Build();
 

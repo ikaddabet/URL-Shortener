@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -20,7 +22,7 @@ namespace UrlShortener;
 
 public static class UrlShortenerExtensions
 {
-    public static UrlShortenerBuilder AddUrlShortener(this IServiceCollection services, Action<UrlShortenerOptions>? configureOptions = null)
+    public static UrlShortenerBuilderOptions AddUrlShortener(this IServiceCollection services, Action<UrlShortenerOptions>? configureOptions = null)
     {
         var options = new UrlShortenerOptions();
         configureOptions?.Invoke(options);
@@ -30,11 +32,11 @@ public static class UrlShortenerExtensions
             services.AddHttpContextAccessor();
         }
 
-        services.ConfigureOptions(options);
+        services.AddSingleton<IOptions<UrlShortenerOptions>>(new OptionsWrapper<UrlShortenerOptions>(options));
         services.AddSingleton<UrlShorteningHelper>();
         services.AddScoped<IUrlShortenerService, UrlShortenerService>();
 
-        return new UrlShortenerBuilder(services);
+        return new UrlShortenerBuilderOptions(services);
     }
 
     public static void UseUrlShortener([NotNull] this IEndpointRouteBuilder endpoints)
@@ -67,6 +69,26 @@ public static class UrlShortenerExtensions
 
             return Results.Redirect(longUrl);
         });
+    }
+}
+
+public class UrlShortenerBuilderOptions(IServiceCollection services) : UrlShortenerBuilder(services)
+{
+    private readonly IServiceCollection _services = services;
+
+    public UrlShortenerBuilder AddConfiguration(IConfiguration configuration)
+    {
+        ServiceDescriptor? isConfigured = _services.FirstOrDefault(service => service.ServiceType == typeof(IOptions<UrlShortenerOptions>));
+        if (isConfigured is not null)
+        {
+            bool isRemoved = _services.Remove(isConfigured);
+            if (isRemoved)
+            {
+                _services.Configure<UrlShortenerOptions>(configuration.GetSection("UrlShortenerOptions"));
+            }
+        }
+
+        return new UrlShortenerBuilder(_services);
     }
 }
 
