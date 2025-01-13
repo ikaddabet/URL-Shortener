@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using UrlShortener.Core;
 using UrlShortener.Core.Entities;
 using UrlShortener.Core.Helpers.UrlShorteningHelper;
 using UrlShortener.Core.Repository;

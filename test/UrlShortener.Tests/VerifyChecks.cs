@@ -1,8 +1,4 @@
-﻿using FluentAssertions;
-using UrlShortener.Core;
-using UrlShortener.Core.Helpers.UrlShorteningHelper;
-
-namespace UrlShortener.Tests;
+﻿namespace UrlShortener.Tests;
 
 internal static class VerifyChecks
 {

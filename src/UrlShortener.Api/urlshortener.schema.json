@@ -8,7 +8,7 @@
         "Length": {
           "type": "integer",
           "description": "The length of the shortened URL path.",
-          "minimum": 1,
+          "minimum": 3,
           "default": 7
         },
         "Alphabet": {

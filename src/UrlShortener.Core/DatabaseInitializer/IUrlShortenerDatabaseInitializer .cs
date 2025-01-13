@@ -1,4 +1,4 @@
-﻿namespace UrlShortener.DatabaseInitializer;
+﻿namespace UrlShortener.Core.DatabaseInitializer;
 public interface IUrlShortenerDatabaseInitializer
 {
     Task ValidateConnectionAsync(CancellationToken cancellationToken = default);

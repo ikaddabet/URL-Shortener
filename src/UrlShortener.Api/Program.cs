@@ -1,4 +1,5 @@
 using UrlShortener;
+using UrlShortener.Database.MySQL.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -6,11 +7,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddUrlShortener(options =>
-{
-    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-    options.DatabaseName = builder.Configuration.GetConnectionString("DatabaseName") ?? throw new InvalidOperationException("Connection string 'DatabaseName' not found.");
-}).AddConfiguration(builder.Configuration).AddMSSQL();
+builder.Services.AddUrlShortener().AddConfiguration(builder.Configuration).AddMySQL();
 
 var app = builder.Build();
 

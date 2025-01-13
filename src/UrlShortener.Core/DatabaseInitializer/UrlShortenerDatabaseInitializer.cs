@@ -1,6 +1,6 @@
 ﻿using UrlShortener.Core.Helpers.SQLHelpers;
 
-namespace UrlShortener.DatabaseInitializer;
+namespace UrlShortener.Core.DatabaseInitializer;
 public class UrlShortenerDatabaseInitializer(ISQLHelper sqlHelper) : IUrlShortenerDatabaseInitializer
 {
     public async Task ValidateConnectionAsync(CancellationToken cancellationToken = default)

@@ -19,6 +19,8 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\UrlShortener\UrlShortener.csproj" />
+      <ProjectReference Include="..\UrlShortener.Database.MSSQL\UrlShortener.Database.MSSQL.csproj" />
+	  <ProjectReference Include="..\UrlShortener.Database.MySQL\UrlShortener.Database.MySQL.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

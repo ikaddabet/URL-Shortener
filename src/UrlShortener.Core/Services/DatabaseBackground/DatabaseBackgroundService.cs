@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using UrlShortener.DatabaseInitializer;
+using UrlShortener.Core.DatabaseInitializer;
 
-namespace UrlShortener.Services.DatabaseBackground;
+namespace UrlShortener.Core.Services.DatabaseBackground;
 public class DatabaseBackgroundService(ILogger<DatabaseBackgroundService> logger, IUrlShortenerDatabaseInitializer databaseInitializer) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
