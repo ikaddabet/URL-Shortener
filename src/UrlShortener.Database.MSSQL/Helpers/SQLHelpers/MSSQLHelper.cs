@@ -50,7 +50,7 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
         ShortenedUrlMigrationTracker.AddMigration(
             MigrationName: "Add Migration Table",
             TableNameWithPrefix: TableNames.MigrationsPrefixed(options.Value.TablePrefix),
-            QueryCheckBeforeExectution: $@"
+            QueryCheckBeforeExecution: $@"
                 IF EXISTS (
                     SELECT 1
                     FROM sys.tables
@@ -71,7 +71,7 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
         ShortenedUrlMigrationTracker.AddMigration(
             MigrationName: "Add ShortenedUrl Table",
             TableNameWithPrefix: TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix),
-            QueryCheckBeforeExectution: $@"
+            QueryCheckBeforeExecution: $@"
                 IF EXISTS (
                     SELECT 1
                     FROM sys.tables
@@ -145,14 +145,14 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
     {
         try
         {
-            // If the QueryCheckBeforeExectution is null or empty, return true
+            // If the QueryCheckBeforeExecution is null or empty, return true
             // This is useful for migrations that don't need to be checked
-            if (string.IsNullOrWhiteSpace(Migration.QueryCheckBeforeExectution))
+            if (string.IsNullOrWhiteSpace(Migration.QueryCheckBeforeExecution))
                 return true;
 
             using var connection = new SqlConnection(options.Value.ConnectionString);
             await connection.OpenAsync(cancellationToken);
-            using var command = new SqlCommand(Migration.QueryCheckBeforeExectution, connection);
+            using var command = new SqlCommand(Migration.QueryCheckBeforeExecution, connection);
             var result = await command.ExecuteScalarAsync(cancellationToken);
             var boolResult = result != null && (bool)result;
             if (!boolResult)

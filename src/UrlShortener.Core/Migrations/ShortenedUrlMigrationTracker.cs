@@ -5,7 +5,7 @@ public static class ShortenedUrlMigrationTracker
 {
     public static List<ShortenedUrlMigrationWithQuery> Migrations = [];
 
-    public static void AddMigration(string MigrationName, string? TableNameWithPrefix = null, string? QueryCheckBeforeExectution = null, string? Query = null)
+    public static void AddMigration(string MigrationName, string? TableNameWithPrefix = null, string? QueryCheckBeforeExecution = null, string? Query = null)
     {
         // Trim leading and trailing spaces from the MigrationName
         string trimmedMigrationName = MigrationName.Trim();
@@ -21,7 +21,7 @@ public static class ShortenedUrlMigrationTracker
         {
             MigrationName = uniqueMigrationName,
             TableNameWithPrefix = TableNameWithPrefix,
-            QueryCheckBeforeExectution = QueryCheckBeforeExectution,
+            QueryCheckBeforeExecution = QueryCheckBeforeExecution,
             Query = Query,
         });
 
