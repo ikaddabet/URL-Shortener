@@ -51,7 +51,7 @@ public partial class MySQLHelper(ILogger<MySQLHelper> logger, IOptions<UrlShorte
         ShortenedUrlMigrationTracker.AddMigration(
             MigrationName: "Add Migration Table",
             TableNameWithPrefix: TableNames.MigrationsPrefixed(options.Value.TablePrefix),
-            QueryCheckBeforeExectution: $@"
+            QueryCheckBeforeRun: $@"
             SELECT COUNT(*)
             FROM information_schema.tables
             WHERE table_name = '{TableNames.MigrationsPrefixed(options.Value.TablePrefix)}' AND table_schema = DATABASE();
@@ -67,7 +67,7 @@ public partial class MySQLHelper(ILogger<MySQLHelper> logger, IOptions<UrlShorte
         ShortenedUrlMigrationTracker.AddMigration(
             MigrationName: "Add ShortenedUrl Table",
             TableNameWithPrefix: TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix),
-            QueryCheckBeforeExectution: $@"
+            QueryCheckBeforeRun: $@"
             SELECT COUNT(*)
             FROM information_schema.tables
             WHERE table_name = '{TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)}' AND table_schema = DATABASE();
@@ -136,14 +136,14 @@ public partial class MySQLHelper(ILogger<MySQLHelper> logger, IOptions<UrlShorte
     {
         try
         {
-            // If the QueryCheckBeforeExectution is null or empty, return true
+            // If the QueryCheckBeforeRun is null or empty, return true
             // This is useful for migrations that don't need to be checked
-            if (string.IsNullOrWhiteSpace(Migration.QueryCheckBeforeExectution))
+            if (string.IsNullOrWhiteSpace(Migration.QueryCheckBeforeRun))
                 return true;
 
             using var connection = new MySqlConnection(options.Value.ConnectionString);
             await connection.OpenAsync(cancellationToken);
-            using var command = new MySqlCommand(Migration.QueryCheckBeforeExectution, connection);
+            using var command = new MySqlCommand(Migration.QueryCheckBeforeRun, connection);
             var result = await command.ExecuteScalarAsync(cancellationToken);
             var boolResult = result != null && Convert.ToInt32(result) > 0;
             if (!boolResult)

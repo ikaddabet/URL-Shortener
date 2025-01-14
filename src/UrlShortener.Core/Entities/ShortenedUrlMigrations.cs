@@ -7,8 +7,10 @@ public class ShortenedUrlMigration
 public class ShortenedUrlMigrationWithQuery : ShortenedUrlMigration
 {
     public string? TableNameWithPrefix { get; set; }
-    public string? QueryCheckBeforeExecution { get; set; }
+    public string? QueryCheckBeforeRun { get; set; }
     public string? Query { get; set; }
+    public Func<Task<bool>>? QueryCheckBeforeRunExecution { get; set; }
+    public Func<Task<bool>>? QueryExecution { get; set; }
 
     public ShortenedUrlMigration ToMigration() => new()
     {
