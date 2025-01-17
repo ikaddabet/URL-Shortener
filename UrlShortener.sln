@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortener.Database.PostgreSQL", "src\UrlShortener.Database.PostgreSQL\UrlShortener.Database.PostgreSQL.csproj", "{39AC6906-BCE4-4B4D-B84C-FED828881ADA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{4ED3DAC1-713E-42DE-B669-1A2D64AB41BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ED3DAC1-713E-42DE-B669-1A2D64AB41BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ED3DAC1-713E-42DE-B669-1A2D64AB41BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39AC6906-BCE4-4B4D-B84C-FED828881ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39AC6906-BCE4-4B4D-B84C-FED828881ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39AC6906-BCE4-4B4D-B84C-FED828881ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39AC6906-BCE4-4B4D-B84C-FED828881ADA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +86,6 @@ Global
 		{999826AE-B899-46A8-8F59-7EE7C8AFEE41} = {9376F74D-8CC5-4E1E-81A7-580A352659A5}
 		{F8DCD8A4-B19A-488B-B2C9-45DC05B5B948} = {9376F74D-8CC5-4E1E-81A7-580A352659A5}
 		{4ED3DAC1-713E-42DE-B669-1A2D64AB41BB} = {9376F74D-8CC5-4E1E-81A7-580A352659A5}
+		{39AC6906-BCE4-4B4D-B84C-FED828881ADA} = {9376F74D-8CC5-4E1E-81A7-580A352659A5}
 	EndGlobalSection
 EndGlobal
