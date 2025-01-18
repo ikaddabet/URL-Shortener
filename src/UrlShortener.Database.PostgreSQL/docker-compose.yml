@@ -1,0 +1,16 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_PASSWORD: RootP@ssw0rd
+      POSTGRES_DB: UrlShortener
+      POSTGRES_USER: user
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./postgres-config:/etc/postgresql/postgresql.conf.d
+volumes:
+  db_data:
