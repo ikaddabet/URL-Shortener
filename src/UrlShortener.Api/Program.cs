@@ -1,5 +1,6 @@
 using UrlShortener;
 using UrlShortener.Database.MySQL.Extensions;
+using UrlShortener.Database.PostgreSQL.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -7,7 +8,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddUrlShortener().AddConfiguration(builder.Configuration).AddMySQL();
+builder.Services.AddUrlShortener().AddConfiguration(builder.Configuration).AddPostgreSQL();
 
 var app = builder.Build();
 

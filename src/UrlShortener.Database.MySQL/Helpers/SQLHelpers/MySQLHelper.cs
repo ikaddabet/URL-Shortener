@@ -75,7 +75,7 @@ public partial class MySQLHelper(ILogger<MySQLHelper> logger, IOptions<UrlShorte
             Query: $@"
             CREATE TABLE {TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)} (
                 Id CHAR(36) NOT NULL DEFAULT (UUID()),  -- Auto-generated UUID
-                LongUrl TEXT NOT NULL,
+                OriginalUrl TEXT NOT NULL,
                 ShortUrl VARCHAR(255) NOT NULL UNIQUE,
                 Code VARCHAR(50) NOT NULL UNIQUE,
                 CreatedOnUtc DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

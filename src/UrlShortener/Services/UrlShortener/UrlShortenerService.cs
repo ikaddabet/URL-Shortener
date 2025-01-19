@@ -44,7 +44,7 @@ internal class UrlShortenerService(IShortenedUrlRepository shortenedUrlRepositor
             var shortenedUrl = new ShortenedUrl
             {
                 Id = Guid.NewGuid(),
-                LongUrl = url.ToString(),
+                OriginalUrl = url.ToString(),
                 Code = Code,
                 ShortUrl = $"{_httpContext.Request.Scheme}://{_httpContext.Request.Host}/api/{Code}",
                 CreatedOnUtc = DateTime.UtcNow

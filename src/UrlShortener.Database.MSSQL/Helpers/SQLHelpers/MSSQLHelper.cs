@@ -84,7 +84,7 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
             Query: $@"
                 CREATE TABLE {TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)} (
                     Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),  -- Auto-generated GUID
-                    LongUrl NVARCHAR(MAX) NOT NULL,
+                    OriginalUrl NVARCHAR(MAX) NOT NULL,
                     ShortUrl NVARCHAR(255) NOT NULL UNIQUE,
                     Code NVARCHAR(50) NOT NULL UNIQUE,
                     CreatedOnUtc DATETIME2 NOT NULL DEFAULT GETUTCDATE(),

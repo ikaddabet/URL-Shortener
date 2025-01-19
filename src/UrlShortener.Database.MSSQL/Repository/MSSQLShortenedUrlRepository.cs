@@ -20,7 +20,7 @@ public class MSSQLShortenedUrlRepository(IOptions<UrlShortenerOptions> options) 
         await connection.OpenAsync();
 
         var query = $@"
-            SELECT LongUrl
+            SELECT OriginalUrl
             FROM {TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)}
             WHERE Code = @Code";
 
@@ -41,11 +41,11 @@ public class MSSQLShortenedUrlRepository(IOptions<UrlShortenerOptions> options) 
         await connection.OpenAsync();
 
         var query = $@"
-            INSERT INTO {TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)} (LongUrl, ShortUrl, Code, CreatedOnUtc)
-            VALUES (@LongUrl, @ShortUrl, @Code, @CreatedOnUtc)";
+            INSERT INTO {TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)} (OriginalUrl, ShortUrl, Code, CreatedOnUtc)
+            VALUES (@OriginalUrl, @ShortUrl, @Code, @CreatedOnUtc)";
 
         using var command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@LongUrl", record.LongUrl);
+        command.Parameters.AddWithValue("@OriginalUrl", record.OriginalUrl);
         command.Parameters.AddWithValue("@ShortUrl", record.ShortUrl);
         command.Parameters.AddWithValue("@Code", record.Code);
         command.Parameters.AddWithValue("@CreatedOnUtc", record.CreatedOnUtc);

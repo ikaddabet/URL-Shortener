@@ -113,14 +113,14 @@ public static class UrlShortenerExtensions
 
         endpoints.MapGet("api/{code}", async (string code, IUrlShortenerService urlShorteningService) =>
         {
-            var longUrl = await urlShorteningService.GetOriginalUrl(code);
+            var OriginalUrl = await urlShorteningService.GetOriginalUrl(code);
 
-            if (string.IsNullOrEmpty(longUrl))
+            if (string.IsNullOrEmpty(OriginalUrl))
             {
                 return Results.NotFound();
             }
 
-            return Results.Redirect(longUrl);
+            return Results.Redirect(OriginalUrl);
         });
     }
 
