@@ -52,36 +52,37 @@ public partial class MySQLHelper(ILogger<MySQLHelper> logger, IOptions<UrlShorte
             MigrationName: "Add Migration Table",
             TableNameWithPrefix: TableNames.MigrationsPrefixed(options.Value.TablePrefix),
             QueryCheckBeforeRun: $@"
-            SELECT COUNT(*)
-            FROM information_schema.tables
-            WHERE table_name = '{TableNames.MigrationsPrefixed(options.Value.TablePrefix)}' AND table_schema = DATABASE();
-        ",
+                SELECT COUNT(*)
+                FROM information_schema.tables
+                WHERE table_name = '{TableNames.MigrationsPrefixed(options.Value.TablePrefix)}' AND table_schema = DATABASE();
+            ",
             Query: $@"
-            CREATE TABLE {TableNames.MigrationsPrefixed(options.Value.TablePrefix)} (
-                MigrationName VARCHAR(255) NOT NULL PRIMARY KEY,
-                AppliedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-            );
-        "
+                CREATE TABLE {TableNames.MigrationsPrefixed(options.Value.TablePrefix)} (
+                    MigrationName VARCHAR(255) NOT NULL PRIMARY KEY,
+                    AppliedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                );
+            ",
+            SaveToHistory: false
         );
 
         ShortenedUrlMigrationTracker.AddMigration(
             MigrationName: "Add ShortenedUrl Table",
             TableNameWithPrefix: TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix),
             QueryCheckBeforeRun: $@"
-            SELECT COUNT(*)
-            FROM information_schema.tables
-            WHERE table_name = '{TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)}' AND table_schema = DATABASE();
-        ",
+                SELECT COUNT(*)
+                FROM information_schema.tables
+                WHERE table_name = '{TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)}' AND table_schema = DATABASE();
+            ",
             Query: $@"
-            CREATE TABLE {TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)} (
-                Id CHAR(36) NOT NULL DEFAULT (UUID()),  -- Auto-generated UUID
-                OriginalUrl TEXT NOT NULL,
-                ShortUrl VARCHAR(255) NOT NULL UNIQUE,
-                Code VARCHAR(50) NOT NULL UNIQUE,
-                CreatedOnUtc DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (Id)
-            );
-        "
+                CREATE TABLE {TableNames.ShortenedUrlPrefixed(options.Value.TablePrefix)} (
+                    Id CHAR(36) NOT NULL DEFAULT (UUID()),  -- Auto-generated UUID
+                    OriginalUrl TEXT NOT NULL,
+                    ShortUrl VARCHAR(255) NOT NULL UNIQUE,
+                    Code VARCHAR(50) NOT NULL UNIQUE,
+                    CreatedOnUtc DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (Id)
+                );
+            "
         );
     }
 
@@ -93,7 +94,7 @@ public partial class MySQLHelper(ILogger<MySQLHelper> logger, IOptions<UrlShorte
             {
                 var exists = await CheckMigartionExistsAsync(Migration, cancellationToken);
                 if (exists) continue;
-                logger?.LogInformation($"Applying migration '{Migration.MigrationName}'...");
+                logger?.LogInformation("Applying migration '{MigrationName}'...", Migration.MigrationName);
 
                 using var connection = new MySqlConnection(options.Value.ConnectionString);
                 await connection.OpenAsync(cancellationToken);
@@ -106,17 +107,20 @@ public partial class MySQLHelper(ILogger<MySQLHelper> logger, IOptions<UrlShorte
                     using var command = new MySqlCommand(Migration.Query, connection, sqlTransaction);
                     await command.ExecuteNonQueryAsync(cancellationToken);
 
-                    var logMigrationQuery = $@"
-                    INSERT INTO {TableNames.MigrationsPrefixed(options.Value.TablePrefix)}
-                    (MigrationName, AppliedAt)
-                    VALUES (@MigrationName, CURRENT_TIMESTAMP);
-                ";
-                    using var logCommand = new MySqlCommand(logMigrationQuery, connection, sqlTransaction);
-                    logCommand.Parameters.AddWithValue("@MigrationName", Migration.MigrationName);
-                    await logCommand.ExecuteNonQueryAsync(cancellationToken);
+                    if (Migration.SaveToHistory)
+                    {
+                        var logMigrationQuery = $@"
+                            INSERT INTO {TableNames.MigrationsPrefixed(options.Value.TablePrefix)}
+                            (MigrationName, AppliedAt)
+                            VALUES (@MigrationName, CURRENT_TIMESTAMP);
+                        ";
+                        using var logCommand = new MySqlCommand(logMigrationQuery, connection, sqlTransaction);
+                        logCommand.Parameters.AddWithValue("@MigrationName", Migration.MigrationName);
+                        await logCommand.ExecuteNonQueryAsync(cancellationToken);
+                    }
 
                     await transaction.CommitAsync(cancellationToken);
-                    logger?.LogInformation($"Migration '{Migration.MigrationName}' applied successfully.");
+                    logger?.LogInformation("Migration '{MigrationName}' applied successfully.", Migration.MigrationName);
                 }
                 catch (Exception)
                 {
@@ -148,7 +152,7 @@ public partial class MySQLHelper(ILogger<MySQLHelper> logger, IOptions<UrlShorte
             var boolResult = result != null && Convert.ToInt32(result) > 0;
             if (!boolResult)
             {
-                logger?.LogWarning($"Migration '{Migration.MigrationName}' does not exist.");
+                logger?.LogWarning("Migration '{MigrationName}' does not exist.", Migration.MigrationName);
             }
             return boolResult;
         }

@@ -65,7 +65,8 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
                     MigrationName NVARCHAR(255) NOT NULL PRIMARY KEY,
                     AppliedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE()
                 );
-            "
+            ",
+            SaveToHistory: false
         );
 
         ShortenedUrlMigrationTracker.AddMigration(
@@ -101,7 +102,7 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
             {
                 var exists = await CheckMigartionExistsAsync(Migration, cancellationToken);
                 if (exists) continue;
-                logger?.LogInformation($"Applying migration '{Migration.MigrationName}'...");
+                logger?.LogInformation("Applying migration '{MigrationName}'...", Migration.MigrationName);
 
                 using var connection = new SqlConnection(options.Value.ConnectionString);
                 await connection.OpenAsync(cancellationToken);
@@ -115,17 +116,20 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
                     using var command = new SqlCommand(Migration.Query, connection, sqlTransaction);
                     await command.ExecuteNonQueryAsync(cancellationToken);
 
-                    var logMigrationQuery = $@"
-                        INSERT INTO {TableNames.MigrationsPrefixed(options.Value.TablePrefix)}
-                        (MigrationName, AppliedAt)
-                        VALUES (@MigrationName, GETUTCDATE());
-                    ";
-                    using var logCommand = new SqlCommand(logMigrationQuery, connection, sqlTransaction);
-                    logCommand.Parameters.AddWithValue("@MigrationName", Migration.MigrationName);
-                    await logCommand.ExecuteNonQueryAsync(cancellationToken);
+                    if (Migration.SaveToHistory)
+                    {
+                        var logMigrationQuery = $@"
+                            INSERT INTO {TableNames.MigrationsPrefixed(options.Value.TablePrefix)}
+                            (MigrationName, AppliedAt)
+                            VALUES (@MigrationName, GETUTCDATE());
+                        ";
+                        using var logCommand = new SqlCommand(logMigrationQuery, connection, sqlTransaction);
+                        logCommand.Parameters.AddWithValue("@MigrationName", Migration.MigrationName);
+                        await logCommand.ExecuteNonQueryAsync(cancellationToken);
+                    }
 
                     await transaction.CommitAsync(cancellationToken);
-                    logger?.LogInformation($"Migration '{Migration.MigrationName}' applied successfully.");
+                    logger?.LogInformation("Migration '{MigrationName}' applied successfully.", Migration.MigrationName);
                 }
                 catch (Exception)
                 {
@@ -157,7 +161,7 @@ public partial class MSSQLHelper(ILogger<MSSQLHelper> logger, IOptions<UrlShorte
             var boolResult = result != null && (bool)result;
             if (!boolResult)
             {
-                logger?.LogWarning($"Migration '{Migration.MigrationName}' does not exist.");
+                logger?.LogWarning("Migration '{MigrationName}' does not exist.", Migration.MigrationName);
             }
             return boolResult;
         }

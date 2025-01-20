@@ -65,7 +65,8 @@ public partial class PostgreSQLHelper(ILogger<PostgreSQLHelper> logger, IOptions
                         MigrationName VARCHAR(255) PRIMARY KEY,
                         AppliedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                     );
-                "
+                ",
+            SaveToHistory: false
         );
 
         // Add migration for the shortened URL table
@@ -111,12 +112,15 @@ public partial class PostgreSQLHelper(ILogger<PostgreSQLHelper> logger, IOptions
                 {
                     await connection.ExecuteAsync(Migration.Query!, transaction: transaction);
 
-                    var logMigrationQuery = $@"
-                            INSERT INTO {TableNames.MigrationsPrefixed(options.Value.TablePrefix)} 
-                            (MigrationName, AppliedAt)
-                            VALUES (@MigrationName, CURRENT_TIMESTAMP);
-                        ";
-                    await connection.ExecuteAsync(logMigrationQuery, new { Migration.MigrationName }, transaction);
+                    if (Migration.SaveToHistory)
+                    {
+                        var logMigrationQuery = $@"
+                                INSERT INTO {TableNames.MigrationsPrefixed(options.Value.TablePrefix)} 
+                                (MigrationName, AppliedAt)
+                                VALUES (@MigrationName, CURRENT_TIMESTAMP);
+                            ";
+                        await connection.ExecuteAsync(logMigrationQuery, new { Migration.MigrationName }, transaction);
+                    }
 
                     await transaction.CommitAsync(cancellationToken);
                     logger?.LogInformation("Migration '{MigrationName}' applied successfully.", Migration.MigrationName);

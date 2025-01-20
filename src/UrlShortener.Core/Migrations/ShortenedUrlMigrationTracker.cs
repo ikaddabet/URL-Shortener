@@ -5,7 +5,7 @@ public static class ShortenedUrlMigrationTracker
 {
     public static List<ShortenedUrlMigrationWithQuery> Migrations = [];
 
-    public static void AddMigration(string MigrationName, string? TableNameWithPrefix = null, string? QueryCheckBeforeRun = null, string? Query = null)
+    public static void AddMigration(string MigrationName, string? TableNameWithPrefix = null, string? QueryCheckBeforeRun = null, string? Query = null, bool SaveToHistory = true)
     {
         // Trim leading and trailing spaces from the MigrationName
         string trimmedMigrationName = MigrationName.Trim();
@@ -23,12 +23,13 @@ public static class ShortenedUrlMigrationTracker
             TableNameWithPrefix = TableNameWithPrefix,
             QueryCheckBeforeRun = QueryCheckBeforeRun,
             Query = Query,
+            SaveToHistory = SaveToHistory
         });
 
         Console.WriteLine($"Migration '{uniqueMigrationName}' added.");
     }
 
-    public static void AddMigration(string MigrationName, string? TableNameWithPrefix = null, Func<Task<bool>>? QueryCheckBeforeRunExecution = null, Func<Task<bool>>? QueryExecution = null)
+    public static void AddMigration(string MigrationName, string? TableNameWithPrefix = null, Func<Task<bool>>? QueryCheckBeforeRunExecution = null, Func<Task<bool>>? QueryExecution = null, bool SaveToHistory = true)
     {
         // Trim leading and trailing spaces from the MigrationName
         string trimmedMigrationName = MigrationName.Trim();
@@ -46,6 +47,7 @@ public static class ShortenedUrlMigrationTracker
             TableNameWithPrefix = TableNameWithPrefix,
             QueryCheckBeforeRunExecution = QueryCheckBeforeRunExecution,
             QueryExecution = QueryExecution,
+            SaveToHistory = SaveToHistory
         });
 
         Console.WriteLine($"Migration '{uniqueMigrationName}' added.");

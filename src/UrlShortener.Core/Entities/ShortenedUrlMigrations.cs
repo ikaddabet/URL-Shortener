@@ -11,6 +11,7 @@ public class ShortenedUrlMigrationWithQuery : ShortenedUrlMigration
     public string? Query { get; set; }
     public Func<Task<bool>>? QueryCheckBeforeRunExecution { get; set; }
     public Func<Task<bool>>? QueryExecution { get; set; }
+    public bool SaveToHistory { get; set; }
 
     public ShortenedUrlMigration ToMigration() => new()
     {
