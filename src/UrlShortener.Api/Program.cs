@@ -1,4 +1,5 @@
 using UrlShortener;
+using UrlShortener.Database.MongoDB.Extensions;
 using UrlShortener.Database.MySQL.Extensions;
 using UrlShortener.Database.PostgreSQL.Extensions;
 
@@ -8,7 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddUrlShortener().AddConfiguration(builder.Configuration).AddPostgreSQL();
+builder.Services.AddUrlShortener().AddConfiguration(builder.Configuration).AddMongoDB();
 
 var app = builder.Build();
 

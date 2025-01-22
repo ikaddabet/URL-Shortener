@@ -11,7 +11,7 @@ namespace UrlShortener.Database.MSSQL.Extensions;
 public static class UrlShortenerBuilderMSSQLExtensions
 {
     /// <summary>
-    /// Configures the necessary services for using Microsoft SQL Server (MSSQL) as the storage mechanism 
+    /// Configures the necessary services for using (MSSQL) as the storage mechanism 
     /// for the URL shortener service. This method registers the required SQL-related dependencies 
     /// including the <see cref="ISQLHelper"/> and <see cref="IShortenedUrlRepository"/> implementations.
     /// 

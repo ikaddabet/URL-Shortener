@@ -1,17 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using UrlShortener.Core;
-using UrlShortener.Core.DatabaseInitializer;
 using UrlShortener.Core.Helpers.SQLHelpers;
 using UrlShortener.Core.Repository;
-using UrlShortener.Core.Services.DatabaseBackground;
-using UrlShortener.Database.PostgreSQL.Helpers.SQLHelpers;
-using UrlShortener.Database.PostgreSQL.Repository;
+using UrlShortener.Database.MongoDB.Helpers.SQLHelpers;
+using UrlShortener.Database.MongoDB.Repository;
 
-namespace UrlShortener.Database.PostgreSQL.Extensions;
-public static class UrlShortenerBuilderPostgreSQLExtensions
+namespace UrlShortener.Database.MongoDB.Extensions;
+public static class UrlShortenerBuilderMongoDBExtensions
 {
     /// <summary>
-    /// Configures the necessary services for using (PostgreSQL) as the storage mechanism 
+    /// Configures the necessary services for using (MongoDB) as the storage mechanism 
     /// for the URL shortener service. This method registers the required SQL-related dependencies 
     /// including the <see cref="ISQLHelper"/> and <see cref="IShortenedUrlRepository"/> implementations.
     /// 
@@ -32,10 +30,10 @@ public static class UrlShortenerBuilderPostgreSQLExtensions
     /// </summary>
     /// <param name="builder">The <see cref="UrlShortenerBuilder"/> instance used for configuring the URL shortener service.</param>
 
-    public static void AddPostgreSQL(this UrlShortenerBuilder builder)
+    public static void AddMongoDB(this UrlShortenerBuilder builder)
     {
-        builder.services.AddSingleton<ISQLHelper, PostgreSQLHelper>();
-        builder.services.AddScoped<IShortenedUrlRepository, PostgreSQLShortenedUrlRepository>();
+        builder.services.AddSingleton<ISQLHelper, MongoDBHelper>();
+        builder.services.AddScoped<IShortenedUrlRepository, MongoDBShortenedUrlRepository>();
 
         builder.AfterStorageTypeSet();
     }
