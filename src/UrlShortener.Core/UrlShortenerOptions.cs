@@ -43,4 +43,8 @@ public class UrlShortenerOptions
     public string DatabaseName { get; set; } = string.Empty;
 }
 
+public class UrlShortenerOptionsEndpoints
+{
+
+}
 

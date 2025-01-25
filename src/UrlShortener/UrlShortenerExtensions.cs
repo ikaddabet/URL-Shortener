@@ -69,30 +69,8 @@ public static class UrlShortenerExtensions
     /// Registers the URL shortener endpoints to the specified route builder, allowing clients to create 
     /// short URLs and resolve them to their original long URLs. These endpoints provide the core functionality 
     /// for interacting with the URL shortening service via HTTP requests.
-    ///
-    /// The following endpoints are added:
-    /// <list type="bullet">
-    ///   <item><description><b>POST api/shorten</b> - Accepts a long URL in the request body and returns a shortened version of the URL.
-    ///     The request must contain a valid URL. If the URL is invalid or if the shortening fails, a bad request response is returned.</description></item>
-    ///   <item><description><b>GET api/{code}</b> - Redirects to the original URL corresponding to the provided shortened code.
-    ///     If the code is valid and the original URL exists, the client is redirected to the long URL. If the code is invalid or not found, 
-    ///     a "not found" response is returned.</description></item>
-    /// </list>
-    /// 
-    /// These endpoints are designed to handle typical URL shortening operations, with error handling for invalid or unsuccessful requests.
-    ///
-    /// <para>
-    /// This method is intended to be called within the `Configure` method of your application's startup class to register the routing logic
-    /// for the URL shortener feature. Additionally, the endpoints are automatically documented in Swagger if the application has Swagger 
-    /// set up, thanks to the use of attribute-based documentation and standard HTTP status codes.
-    /// </para>
     /// </summary>
-    /// <param name="endpoints">The <see cref="IEndpointRouteBuilder"/> to which the URL shortener routes will be added.</param>
-    /// <remarks>
-    /// The <b>POST api/shorten</b> endpoint requires a valid JSON body with a "Url" field, while the <b>GET api/{code}</b> endpoint expects 
-    /// the shortened URL code to be provided in the route.
-    /// </remarks>
-    public static void UseUrlShortener([NotNull] this IEndpointRouteBuilder endpoints)
+    public static void MapUrlShortenerEndpoints([NotNull] this IEndpointRouteBuilder endpoints, Action<UrlShortenerOptionsEndpoints>? configureOptions = null)
     {
         endpoints.MapPost("api/shorten", async (ShortenUrlRequest request, IUrlShortenerService urlShorteningService) =>
         {
